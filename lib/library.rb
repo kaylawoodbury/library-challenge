@@ -2,7 +2,7 @@ require 'yaml'
 require 'date'
 
 class Library
-    attr_accessor :catalog, :return_date, :books_checked_out
+    attr_accessor :catalog, :return_date, :books_checked_out, :user_search
 
     STANDARD_TIME_MONTH = 1
 
@@ -48,8 +48,32 @@ class Library
     def set_return_date
         Date.today.next_month(STANDARD_TIME_MONTH).strftime('%D')
     end   
-      
+    
+    def book_to_return(user_search)
+        books_returned = []
+        books_returned << @catalog.detect { |obj| obj[:item][:title] == user_search }
+    end
 
+    def return_book(user_search)
+    #update availability
+    books_to_return(user_search)[0][:available] = true
+    #update return date
+    books_to_return(user_search)[0][:return_date] = nil
+    #push to yml
+    File.open('./lib/data.yml', 'w') { |f| f.write catalog.to_yaml }
+    #message to user
+    print "Return Complete"
+    end
+
+    #Still working on this, does not yet add to yml file
+    def add_new_book
+    print "Title of New Book: "
+    new_book_title = gets.chomp.to_s
+    print "Author: "
+    new_book_author = gets.chomp.to_s
+    File.open('./lib/data.yml', 'w') { |f| f.write catalog.to_yaml } <<{:item=>{:title=>new_book_title, :author=>new_book_author}, :available=>true, :return_date=>nil}
+    
+    end
 
 
 end
