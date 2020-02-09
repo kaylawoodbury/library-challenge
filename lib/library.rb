@@ -16,16 +16,17 @@ class Library
         
     end 
 
-    def user_type
+    def start
         puts "Welcome to the Digital Library"
         puts "Are you a visitor or employee? "
         user_type = gets.chomp.to_s
         if user_type == 'visitor'
-            puts "To view entire library catalog: library.full_catalog"
-            puts "To search for a book by title: library.title_search(*book title*)"
-            puts "To search for a book by author: library.author_search(*author name*)"
-            puts "To checkout a book:"
-            puts "To return a book: "
+            puts "Available actions include:"
+            puts 'library.full_catalog'
+            puts "library.title_search"
+            puts "library.author_search"
+            puts "library.book_to_checkout"
+            puts "library.book_to_return"
         else
             puts "To view full library catalog: library.full_catalog"
             puts "To add new book to library collection: library.add_new_book"
@@ -33,12 +34,16 @@ class Library
     end
 
    #User can search
-    def author_search(user_search)
-        @book = catalog.select { |obj| obj[:item][:author].include? user_search }
+    def author_search
+        puts 'Search for books with author name like: '
+        author_name = gets.chomp.to_s
+        @book = catalog.select { |obj| obj[:item][:author].include? author_name }
     end
 
-    def title_search(user_search)
-        @book = catalog.select { |obj| obj[:item][:title].include? user_search }
+    def title_search
+        puts 'Search for books with title like: '
+        book_title = gets.chomp.to_s
+        @book = catalog.select { |obj| obj[:item][:title].include? book_title}
     end
 
     
@@ -73,8 +78,11 @@ class Library
         Date.today.next_month(STANDARD_TIME_MONTH).strftime('%D')
     end   
     
-    def book_to_return(user_search)
-        @books_returned << @catalog.detect { |obj| obj[:item][:title] == user_search }
+    def book_to_return
+        puts 'Enter full title of book you wish to return: '
+        full_book_title = gets.chomp.to_s
+        @books_returned << @catalog.detect { |obj| obj[:item][:title] == full_book_title}
+        puts 'Please enter: library.return_book'
     end
 
     def return_book
@@ -86,10 +94,10 @@ class Library
         File.open('./lib/data.yml', 'w') { |f| f.write catalog.to_yaml }
         #reload yml file since its been updated
         YAML.load_file('./lib/data.yml')
+        #message to user
+        { message: 'Return Complete', book_returned: @books_returned[0][:item][:title], returned_date: Date.today }
         #reset books_returned to 0 so that is user reopens 
         @books_returned = nil
-        #message to user
-        print "Return Complete"
     end
 
     #Still working on this, does not yet add to yml file

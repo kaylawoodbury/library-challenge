@@ -40,7 +40,7 @@ describe Library do
         end
     
         it 'updates the availability of book,after checkout' do
-            expected_output = (false)
+            expected_output = false
             expect(subject.book_to_checkout('Pippi Långstrump')[0][:available]).to eq expected_output 
         end
 
@@ -54,7 +54,7 @@ describe Library do
 
         it 'updates the availability of book, after return' do
         
-            expected_output = (true)
+            expected_output = true
             expect(subject.book_to_return("Skratta lagom! Sa pappa Åberg")[0][:available]).to eq expected_output 
         end
 
