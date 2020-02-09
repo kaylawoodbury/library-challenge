@@ -39,16 +39,19 @@ class Library
     end
 
     def create_visitor_id(visitor)        
-        borrower.status = true
-        borrower.id = rand(100000..999999)                     
+        visitor.visitor_account_status = true
+        visitor.visitor_id = rand(100000..999999)                     
     end
 
+   def full_catalog
+        ap @catalog
+   end 
 
    #User can search, working as expected
     def author_search
         puts 'Search for books with author name like: '
         author_name = gets.chomp.to_s
-        pp catalog.select { |obj| obj[:item][:author].include? author_name }
+        ap catalog.select { |obj| obj[:item][:author].include? author_name }
         
     end
 
@@ -56,7 +59,7 @@ class Library
         puts 'Search for books with title like: '
         book_title = gets.chomp.to_s
         #@book = catalog.select { |obj| obj[:item][:title].include? book_title}
-        pp catalog.select { |obj| obj[:item][:title].include? book_title}
+        ap catalog.select { |obj| obj[:item][:title].include? book_title}
 
     end
 
@@ -70,6 +73,7 @@ class Library
         @is_book_available = []
         @is_book_available << @catalog.detect{ |obj| obj[:item][:title] == full_book_title }
         availability = @is_book_available[0][:available]
+        
         if availability == true
             puts 'This book is available, would you like to continue to checkout? (yes/no)'
             proceed_to_checkout = gets.chomp.to_s
@@ -92,6 +96,7 @@ class Library
         File.open('./lib/data.yml', 'w') { |f| f.write catalog.to_yaml }
         #reload yml file since its been updated
         YAML.load_file('./lib/data.yml')
+        @is_book_available = [] 
         #message to user
         { message: 'Checkout complete', return_date: set_return_date } 
     end

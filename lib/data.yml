@@ -17,8 +17,8 @@
 - :item:
     :title: Pippi Långstrump
     :author: Astrid Lindgren
-  :available: true
-  :return_date: 
+  :available: false
+  :return_date: 03/09/20
 - :item:
     :title: Pippi Långstrump går ombord
     :author: Astrid Lindgren
@@ -27,8 +27,8 @@
 - :item:
     :title: Quiet
     :author: Susan Cain
-  :available: true
-  :return_date: 
+  :available: false
+  :return_date: 03/09/20
 - :item:
     :title: Lord of the Rings
     :author: JRR Tolkien

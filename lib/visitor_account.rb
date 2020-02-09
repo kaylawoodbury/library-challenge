@@ -1,16 +1,16 @@
 class Visitor
-    attr_accessor :name, :borrowed_books, :id, :account_status 
+    attr_accessor :name, :borrowed_books, :visitor_id, :visitor_account_status 
 
     def initialize(name="")
         name.empty? ? provide_name : @name = name
         @borrowed_books = []
-        @id = nil
-        @account_status = nil        
+        @visitor_id = nil
+        @visitor_account_status = nil        
     end
 
     private
 
     def provide_name
-        raise ArgumentError, 'You must provide a name when you create an account'
+        raise ArgumentError, 'Must include name to create account.'
     end
 end
