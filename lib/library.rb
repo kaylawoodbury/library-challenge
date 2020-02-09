@@ -4,15 +4,15 @@ require 'pp'
 
 
 class Library
-    attr_accessor :catalog, :return_date, :books_checked_out, :user_search, :books_returned, :is_book_available
+    attr_accessor :catalog, :return_date, :book_checked_out, :user_search, :book_returned, :is_book_available
 
     STANDARD_TIME_MONTH = 1
 
     def initialize
         @catalog = YAML.load_file('./lib/data.yml')
         @return_date = set_return_date()
-        @books_returned = []
-        @books_checked_out = []
+        @book_returned = []
+        @book_checked_out = []
     end
 
 
@@ -60,26 +60,25 @@ class Library
         full_book_title = gets.chomp.to_s
         @is_book_available = []
         @is_book_available << @catalog.detect{ |obj| obj[:item][:title] == full_book_title }
-        availablity = @is_book_available[0][:available]
-        #availablity = @book[0][:available]
+        availability = @is_book_available[0][:available]
         if availability == true
             puts 'This book is available, would you like to continue to checkout? (yes/no)'
-            #proceed_to_checkout = gets.chomp.to_s
-            #if proceed_to_checkout == yes
-                #books_checked_out << @catalog.detect { |obj| obj[:item][:title] == full_book_title }
-                #checkout()
-            #else  puts 'Checkout cancelled'
-            #end
+            proceed_to_checkout = gets.chomp.to_s
+            if proceed_to_checkout == 'yes'
+                @book_checked_out << @catalog.detect { |obj| obj[:item][:title] == full_book_title }
+                checkout()
+            else  puts 'Checkout cancelled'
+            end
         else puts 'This book is currently unavailable'
         end
     end
      
-    # then if the book is available we want to 'checkout' by updating the books availability and return_date and message to user
+    # then if the book is available we want to 'checkout' by updating the book\s availability and return_date in the yml file, and send message to user
     def checkout()
         #update availability
-        book_to_checkout(user_search)[0][:available] = false
+        @book_checked_out[0][:available] = false
         #update return date
-        book_to_checkout(user_search)[0][:return_date] = @return_date
+        @book_checked_out[0][:return_date] = @return_date
         #push to yml
         File.open('./lib/data.yml', 'w') { |f| f.write catalog.to_yaml }
         #reload yml file since its been updated
@@ -97,27 +96,25 @@ class Library
     def return_book
         puts 'Enter full title of book you wish to return: '
         full_book_title = gets.chomp.to_s
-        @books_returned << @catalog.detect { |obj| obj[:item][:title] == full_book_title}
-        puts 'Please enter: library.return_book'
-    end
+        @book_returned << @catalog.detect { |obj| obj[:item][:title] == full_book_title}
 
-    def return_book
         #update availability
-        @books_returned[0][:available] = true
+        @book_returned[0][:available] = true
         #update return date
-        @books_returned[0][:return_date] = nil
+        @book_returned[0][:return_date] = nil
         #push to yml
         File.open('./lib/data.yml', 'w') { |f| f.write catalog.to_yaml }
         #reload yml file since its been updated
         YAML.load_file('./lib/data.yml')
+        @book_returned = [] 
         #message to user
-        { message: 'Return Complete', book_returned: @books_returned[0][:item][:title], returned_date: Date.today }
-        #reset books_returned to 0 so that is user reopens 
-        @books_returned = nil
+         { message: 'Return Complete', book_returned: full_book_title, returned_date: Date.today }
     end
 
+
+
 ###### Add new book #########
-    #Still working on this, does not yet add to yml file
+
     def add_new_book
         print "Title of New Book: "
         new_book_title = gets.chomp.to_s

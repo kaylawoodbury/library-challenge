@@ -12,8 +12,8 @@
 - :item:
     :title: Osynligt med Alfons
     :author: Gunilla Bergström
-  :available: false
-  :return_date: 03/01/20
+  :available: true
+  :return_date: 
 - :item:
     :title: Pippi Långstrump
     :author: Astrid Lindgren
@@ -27,5 +27,10 @@
 - :item:
     :title: Quiet
     :author: Susan Cain
+  :available: true
+  :return_date: 
+- :item:
+    :title: Lord of the Rings
+    :author: JRR Tolkien
   :available: true
   :return_date: 
