@@ -10,6 +10,27 @@ class Library
         @catalog = YAML.load_file('./lib/data.yml')
         @return_date = set_return_date()
     end
+
+    def full_catalog
+        
+    end 
+
+    def user_type
+        puts "Welcome to the Digital Library"
+        puts "Are you a visitor or employee? "
+        user_type = gets.chomp.to_s
+        if user_type == 'visitor'
+            puts "To view entire library catalog: library.full_catalog"
+            puts "To search for a book by title: library.title_search(*book title*)"
+            puts "To search for a book by author: library.author_search(*author name*)"
+            puts "To checkout a book:"
+            puts "To return a book: "
+        else
+            puts "To view full library catalog: library.full_catalog"
+            puts "To add new book to library collection: library.add_new_book"
+        end
+    end
+
    #User can search
     def author_search(user_search)
         @book = catalog.select { |obj| obj[:item][:author].include? user_search }
