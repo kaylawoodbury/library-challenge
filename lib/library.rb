@@ -10,6 +10,7 @@ class Library
         @catalog = YAML.load_file('./lib/data.yml')
         @return_date = set_return_date()
         @books_returned = []
+        @books_checked_out = []
     end
 
     def full_catalog
@@ -47,21 +48,26 @@ class Library
     end
 
     
-    #We want to first find the book the user wants to check out
-    def book_to_checkout(user_search)
-        books_checked_out = []
-        books_checked_out << @catalog.detect { |obj| obj[:item][:title] == user_search }
-    end
-    
     # we then want to check the book's availability
     # we then want an OR statement to either checkout book or say book is not available (maybe do in one step?)
-    def book_availability?(user_search)
+    def book_to_checkout
+        puts 'Enter full title of book you wish to checkout: '
+        full_book_title = gets.chomp.to_s
         availablity = book_to_checkout(user_search)[0][:available]
-        availablity ? checkout(user_search) : 'Checkout incomplete, book unavailable.'
+        if availability == true
+            puts 'This book is available, would you like to continue to checkout? (yes/no)'
+            proceed_to_checkout = gets.chomp.to_s
+            if proceed_to_checkout == yes
+                books_checked_out << @catalog.detect { |obj| obj[:item][:title] == full_book_title }
+                checkout()
+            else  puts 'Checkout cancelled'
+            end
+        else puts 'This book is currently unavailable'
+        end
     end
-    
+     
     # then if the book is available we want to 'checkout' by updating the books availability and return_date and message to user
-    def checkout(user_search)
+    def checkout
         #update availability
         book_to_checkout(user_search)[0][:available] = false
         #update return date
