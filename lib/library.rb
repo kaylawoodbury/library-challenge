@@ -4,6 +4,7 @@ require 'pp'
 require 'colorize'
 require 'awesome_print'
 require 'pry'
+require './lib/visitor_account.rb'
 
 
 class Library
@@ -29,18 +30,22 @@ class Library
             puts 'library.catalog'
             puts 'library.title_search'
             puts 'library.author_search'
+            puts 'library.create_visitor_account'
             puts 'library.check_out_book'
             puts 'library.return_book'
         else
             puts 'Available actions include:'
             puts 'library.catalog'
             puts 'library.add_new_book'
+
         end
     end
 
-    def create_visitor_id(visitor)        
+    def create_visitor_account
+        visitor=Visitor.new
         visitor.visitor_account_status = true
-        visitor.visitor_id = rand(100000..999999)                     
+        puts 'Your User ID is:'
+        visitor.visitor_id = rand(10000..99999)                     
     end
 
    def full_catalog
@@ -88,17 +93,23 @@ class Library
      
     # then if the book is available we want to 'checkout' by updating the book\s availability and return_date in the yml file, and send message to user
     def checkout()
-        #update availability
-        @book_checked_out[0][:available] = false
-        #update return date
-        @book_checked_out[0][:return_date] = @return_date
-        #push to yml
-        File.open('./lib/data.yml', 'w') { |f| f.write catalog.to_yaml }
-        #reload yml file since its been updated
-        YAML.load_file('./lib/data.yml')
-        @is_book_available = [] 
-        #message to user
-        { message: 'Checkout complete', return_date: set_return_date } 
+        puts 'Enter your user ID: '
+        #entered_id = gets.chomp.to_i
+        when visitor.visitor_id == gets.chomp.to_i
+            #update availability
+            @book_checked_out[0][:available] = false
+            #update return date
+            @book_checked_out[0][:return_date] = @return_date
+            #push to yml
+            File.open('./lib/data.yml', 'w') { |f| f.write catalog.to_yaml }
+            #reload yml file since its been updated
+            YAML.load_file('./lib/data.yml')
+            @is_book_available = [] 
+            #message to user
+            { message: 'Checkout complete', return_date: set_return_date } 
+        else 
+            raise  'You must provide a name when you create a Borrower'
+        end
     end
     
     def set_return_date

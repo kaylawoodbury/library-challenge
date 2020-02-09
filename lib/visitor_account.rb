@@ -8,9 +8,8 @@ class Visitor
         @visitor_account_status = nil        
     end
 
-    private
-
     def provide_name
-        raise ArgumentError, 'Must include name to create account.'
+        puts 'What is your name?'
+        @name = gets.chomp.to_s
     end
 end
