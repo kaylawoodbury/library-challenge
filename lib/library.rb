@@ -1,6 +1,9 @@
 require 'yaml'
 require 'date'
 require 'pp'
+require 'colorize'
+require 'awesome_print'
+require 'pry'
 
 
 class Library
@@ -34,6 +37,12 @@ class Library
             puts 'library.add_new_book'
         end
     end
+
+    def create_visitor_id(visitor)        
+        borrower.status = true
+        borrower.id = rand(100000..999999)                     
+    end
+
 
    #User can search, working as expected
     def author_search
