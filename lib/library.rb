@@ -4,7 +4,7 @@ require 'pp'
 
 
 class Library
-    attr_accessor :catalog, :return_date, :books_checked_out, :user_search, :books_returned
+    attr_accessor :catalog, :return_date, :books_checked_out, :user_search, :books_returned, :is_book_available
 
     STANDARD_TIME_MONTH = 1
 
@@ -58,9 +58,9 @@ class Library
     def check_out_book
         puts 'Enter full title of book you wish to checkout: '
         full_book_title = gets.chomp.to_s
-        is_book_available = {}
-        is_book_available << @catalog.detect{ |obj| obj[:item][:title] == full_book_title }
-        availablity = is_book_available[:available]
+        @is_book_available = []
+        @is_book_available << @catalog.detect{ |obj| obj[:item][:title] == full_book_title }
+        availablity = @is_book_available[0][:available]
         #availablity = @book[0][:available]
         if availability == true
             puts 'This book is available, would you like to continue to checkout? (yes/no)'
@@ -123,6 +123,7 @@ class Library
         new_book_title = gets.chomp.to_s
         print "Author: "
         new_book_author = gets.chomp.to_s
-        File.open('./lib/data.yml', 'w') { |f| f.write catalog.to_yaml } <<{:item=>{:title=>new_book_title, :author=>new_book_author}, :available=>true, :return_date=>nil}
+        @catalog << {:item=>{:title=>new_book_title, :author=>new_book_author}, :available=>true, :return_date=>nil}
+        File.write('./lib/data.yml', YAML.dump(@catalog))
     end
 end
