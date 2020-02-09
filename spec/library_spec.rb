@@ -55,12 +55,12 @@ describe Library do
         it 'updates the availability of book, after return' do
         
             expected_output = (true)
-            expect(subject.books_to_return("Skratta lagom! Sa pappa Åberg")[0][:available]).to eq expected_output 
+            expect(subject.book_to_return("Skratta lagom! Sa pappa Åberg")[0][:available]).to eq expected_output 
         end
 
         it 'updates the return_date, after return' do
             expected_output = nil  
-            expect(subject.books_to_return("Skratta lagom! Sa pappa Åberg")[0][:return_date]).to eq expected_output  
+            expect(subject.book_to_return("Skratta lagom! Sa pappa Åberg")[0][:return_date]).to eq expected_output  
         end
     end
     
